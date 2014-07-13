@@ -1,0 +1,15 @@
+{
+  "name": "purescript-featurespec",
+  "version": "0.0.0",
+  "description": "Write high level features.",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-purescript": "0.0.9",
+    "gulp-rimraf": "^0.1.0"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "purescript-chalk": "0.0.3"
+  }
+}
