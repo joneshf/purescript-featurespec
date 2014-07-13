@@ -61,25 +61,28 @@ module Test.FeatureSpec where
     tell [chalk Yellow (oldIndent ++ "pending")]
     modify ((:) Pending)
 
-  given :: String -> FeatureSpec Unit
-  given str = do
+  phrase :: String -> String -> FeatureSpec Unit
+  phrase topic sentence = do
     oldIndent <- ask
-    tell [chalk Green (oldIndent ++ "Given ") ++ str]
+    tell [oldIndent ++ chalk Green topic   ++ sentence]
+
+  given :: String -> FeatureSpec Unit
+  given = phrase "Given "
 
   when :: String -> FeatureSpec Unit
-  when str = do
-    oldIndent <- ask
-    tell [chalk Green (oldIndent ++ "When ") ++ str]
+  when = phrase "When "
 
   it :: String -> FeatureSpec Unit
-  it str = do
-    oldIndent <- ask
-    tell [chalk Green (oldIndent ++ "It ") ++ str]
+  it = phrase "It "
 
   info :: String -> FeatureSpec Unit
-  info str = do
-    oldIndent <- ask
-    tell [oldIndent ++ str]
+  info = phrase ""
+
+  and :: String -> FeatureSpec Unit
+  and = phrase "And "
+
+  but :: String -> FeatureSpec Unit
+  but = phrase "But "
 
   assert :: Boolean -> String -> FeatureSpec Unit
   assert true  msg = modify $ (:) (Good msg)
