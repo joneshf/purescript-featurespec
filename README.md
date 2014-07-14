@@ -2,36 +2,38 @@
 
 ## Module Test.FeatureSpec
 
-### Types
-
-    type FeatureSpec a = RWS Indent Log [Result] a
-
-    type GivenWhenThen  = FeatureSpec Unit
-
-    type Indent  = String
-
-    type Log  = [String]
-
-    data Result where
-      Pending :: Result
-      Good :: String -> Result
-      Bad :: String -> Result
-
-
-### Type Class Instances
-
-    instance eqResult :: Eq Result
-
+## Module Test.FeatureSpec.Assert
 
 ### Values
 
-    assert :: Boolean -> String -> FeatureSpec Unit
+    assert :: Boolean -> FeatureSpec Unit
 
-    assert' :: Boolean -> FeatureSpec Unit
+    assert' :: Boolean -> String -> FeatureSpec Unit
 
-    badResult :: Result -> Boolean
+    assertJust :: forall a. Maybe a -> FeatureSpec Unit
 
-    feature :: String -> FeatureSpec Unit -> FeatureSpec Unit
+    assertJust' :: forall a. Maybe a -> String -> FeatureSpec Unit
+
+    assertLeft :: forall a b. Either a b -> FeatureSpec Unit
+
+    assertLeft' :: forall a b. Either a b -> String -> FeatureSpec Unit
+
+    assertNothing :: forall a. Maybe a -> FeatureSpec Unit
+
+    assertNothing' :: forall a. Maybe a -> String -> FeatureSpec Unit
+
+    assertRight :: forall a b. Either a b -> FeatureSpec Unit
+
+    assertRight' :: forall a b. Either a b -> String -> FeatureSpec Unit
+
+
+## Module Test.FeatureSpec.Phrase
+
+### Values
+
+    and :: String -> FeatureSpec Unit
+
+    but :: String -> FeatureSpec Unit
 
     given :: String -> FeatureSpec Unit
 
@@ -41,11 +43,53 @@
 
     pending :: FeatureSpec Unit
 
+    when :: String -> FeatureSpec Unit
+
+
+## Module Test.FeatureSpec.Section
+
+### Values
+
+    feature :: String -> FeatureSpec Unit -> FeatureSpec Unit
+
+    ignore :: String -> FeatureSpec Unit -> FeatureSpec Unit
+
     scenario :: String -> FeatureSpec Unit -> FeatureSpec Unit
 
     spec :: forall eff. String -> FeatureSpec Unit -> Eff (trace :: Trace | eff) Unit
 
-    when :: String -> FeatureSpec Unit
+
+## Module Test.FeatureSpec.Types
+
+### Types
+
+    type FeatureSpec a = RWS Indent Log Results a
+
+    type Indent  = String
+
+    type Log  = [String]
+
+    data Phrase where
+      Info :: Phrase
+      Given :: Phrase
+      When :: Phrase
+      It :: Phrase
+      And :: Phrase
+      But :: Phrase
+
+    data Result where
+      Pending :: Result
+      Good :: String -> Result
+      Bad :: String -> Result
+
+    type Results  = [Result]
+
+
+### Type Class Instances
+
+    instance eqResult :: Eq Result
+
+    instance showPhrase :: Show Phrase
 
 
 
