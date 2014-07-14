@@ -27,7 +27,7 @@ var options = {
     src: {},
     test: {
         output: 'test.js',
-        main: 'Test.Test.TvSetSpec'
+        main: 'Test.Test.FeatureSpec'
     }
 };
 
