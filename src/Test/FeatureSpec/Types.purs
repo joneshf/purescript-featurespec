@@ -1,11 +1,16 @@
 module Test.FeatureSpec.Types where
 
-  import Control.Monad.RWS
+  import Control.Monad.Eff
+  import Control.Monad.Eff.Exception (Exception())
+  import Control.Monad.RWS.Trans (RWST())
+
+  import Debug.Trace (Trace())
 
   type Log = [String]
   type Indent = String
   type Results = [Result]
-  type FeatureSpec a = RWS Indent Log Results a
+  type FeatureSpec a =
+    forall eff. RWST Indent Log Results (Eff (err :: Exception, trace :: Trace | eff)) a
 
   data Result = Pending
               | Good String

@@ -11,6 +11,7 @@
     "purescript-transformers": "~0.2.1",
     "chalk": "~0.5.1",
     "purescript-chalk": "~0.0.4",
-    "purescript-either": "~0.1.3"
+    "purescript-either": "~0.1.3",
+    "purescript-exceptions": "~0.2.1"
   }
 }

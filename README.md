@@ -56,14 +56,14 @@
 
     scenario :: String -> FeatureSpec Unit -> FeatureSpec Unit
 
-    spec :: forall eff. String -> FeatureSpec Unit -> Eff (trace :: Trace | eff) Unit
+    spec :: forall eff. String -> FeatureSpec Unit -> FeatureSpec Unit
 
 
 ## Module Test.FeatureSpec.Types
 
 ### Types
 
-    type FeatureSpec a = RWS Indent Log Results a
+    type FeatureSpec a = forall eff. RWST Indent Log Results (Eff (trace :: Trace, err :: Exception | eff)) a
 
     type Indent  = String
 

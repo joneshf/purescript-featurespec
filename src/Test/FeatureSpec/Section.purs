@@ -5,22 +5,24 @@ module Test.FeatureSpec.Section
   , spec
   ) where
 
-  import Control.Monad.Eff
-  import Control.Monad.RWS
+  import Control.Monad.RWS (ask, put, tell)
+  import Control.Monad.RWS.Trans (execRWST)
+  import Control.Monad.Trans (lift)
 
   import Data.Foldable (any, elem)
   import Data.String (joinWith)
   import Data.String.Chalk
+  import Data.Tuple (Tuple(..))
 
   import Debug.Trace
 
   import Test.FeatureSpec.Types
 
-  spec :: forall eff. String -> FeatureSpec Unit -> Eff (trace :: Trace | eff) Unit
-  spec str features = case runRWS features indent [] of
-    {log = log, state = res} -> do
-      trace $ chalk (colorize res) "Spec" ++ ": " ++ str
-      trace $ joinWith "\n" log
+  spec :: forall eff. String -> FeatureSpec Unit -> FeatureSpec Unit
+  spec str features = do
+    Tuple res log <- lift $ execRWST features indent []
+    lift $ trace $ chalk (colorize res) "Spec" ++ ": " ++ str
+    lift $ trace $ joinWith "\n" log
 
   feature :: String -> FeatureSpec Unit -> FeatureSpec Unit
   feature = section "Feature"
@@ -31,12 +33,10 @@ module Test.FeatureSpec.Section
   section :: String -> String -> FeatureSpec Unit -> FeatureSpec Unit
   section topic sentence scenarios = do
     oldIndent <- ask
-    let indent' = oldIndent ++ indent
-    case runRWS scenarios indent' [] of
-      {log = log, state = res} -> do
-        put res
-        tell [oldIndent ++ chalk (colorize res) topic ++ ": " ++ sentence]
-        tell [joinWith "\n" log]
+    Tuple res log <- lift $ execRWST scenarios (oldIndent ++ indent) []
+    put res
+    tell [oldIndent ++ chalk (colorize res) topic ++ ": " ++ sentence]
+    tell [joinWith "\n" log]
 
   ignore  :: String -> FeatureSpec Unit -> FeatureSpec Unit
   ignore str _ = do
