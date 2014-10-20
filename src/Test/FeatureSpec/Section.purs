@@ -5,10 +5,13 @@ module Test.FeatureSpec.Section
   , spec
   ) where
 
+  import Control.Monad (when)
+  import Control.Monad.Eff.Exception (error, throwException)
   import Control.Monad.RWS (ask, put, tell)
   import Control.Monad.RWS.Trans (execRWST)
   import Control.Monad.Trans (lift)
 
+  import Data.Array (filter, length)
   import Data.Foldable (any, elem)
   import Data.String (joinWith)
   import Data.String.Chalk
@@ -23,6 +26,9 @@ module Test.FeatureSpec.Section
     Tuple res log <- lift $ execRWST features indent []
     lift $ trace $ chalk (colorize res) "Spec" ++ ": " ++ str
     lift $ trace $ joinWith "\n" log
+    let bad = filter isBad res
+    when (length bad > 0) $
+      lift $ throwException $ error $ show (length bad) ++ " error(s)."
 
   feature :: String -> FeatureSpec Unit -> FeatureSpec Unit
   feature = section "Feature"
@@ -37,6 +43,9 @@ module Test.FeatureSpec.Section
     put res
     tell [oldIndent ++ chalk (colorize res) topic ++ ": " ++ sentence]
     tell [joinWith "\n" log]
+    let bad = filter isBad res
+    when (length bad > 0) $
+      lift $ throwException $ error $ show (length bad) ++ " error(s)."
 
   ignore  :: String -> FeatureSpec Unit -> FeatureSpec Unit
   ignore str _ = do
