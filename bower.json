@@ -1,6 +1,6 @@
 {
   "name": "purescript-featurespec",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Write high level features.",
   "license": "MIT",
   "devDependencies": {},
