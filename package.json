@@ -9,7 +9,8 @@
     "gulp-rimraf": "^0.1.0"
   },
   "dependencies": {
-    "chalk": "^0.5.1"
+    "chalk": "^0.5.1",
+    "purescript-chalk": "0.0.3"
   },
   "repository": {
     "type": "git",
